@@ -1,3 +1,9 @@
+# How to run app
+This app is containerized with docker. All you have to do is 
+Clone the APP
+RUN `docker compose up --build` 
+You are good to go
+
 # Module Exercise
 
 This is a module-aware Laravel app stub (contained in [./src](./src)), with a `Demo` module that adds a `GET /demo` endpoint. The Laravel app is a proof-of-concept host that is capable of loading modules (on startup) that extend its functionality, without direct references from the host.
