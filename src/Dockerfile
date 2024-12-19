@@ -28,8 +28,7 @@ RUN chown -R www-data:www-data /var/www
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Generate app key and run migrations
-# RUN php artisan key:generate
 # Expose port
 EXPOSE 59000
+
 CMD sh -c "php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=59000"
