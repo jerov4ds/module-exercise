@@ -1,66 +1,32 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Module Exercise
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a module-aware Laravel app stub (contained in [./src](./src)), with a `Demo` module that adds a `GET /demo` endpoint. The Laravel app is a proof-of-concept host that is capable of loading modules (on startup) that extend its functionality, without direct references from the host.
 
-## About Laravel
+### Module Structure
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The only required file in a module is a `routes.php` (as demonstrated in [./src/modules/Demo/routes.php](./src/modules/Demo/routes.php)). Controllers must be based on `Illuminate\Routing\Controller` and namespaces must be correct, per Laravel's conventions.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Your Task
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Implement a `User` module that meets the functional requirements, and cover your logic in relevant automated tests. Fork this repository, implement your solution and replace this README file with instructions for running your application.
 
-## Learning Laravel
+## Instructions
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Containerize the application with a Dockerfile in the `./src` directory. Note: There are bonus points for readability, slim container image size, multi-stage build, etc.
+2. Add a `compose.yml` in the repository root with an `app` service (being the Laravel app) and a `mysql` service which the Laravel app must connect to for persistence.
+3. Place your `User` module in `./src/modules`. Note: There are bonus points for binding the `User` module directory as a read-only volume in the `compose.yml` file.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+> See [./docs](./docs) for the fields required in persisted user states and returned payloads.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Functional Requirements
 
-## Laravel Sponsors
+1. Running `docker compose up` in the repository/solution root should run and expose the app to the host machine on port `59000`. No other port should be exposed to the host machine.
+2. `GET /users` should either return a JSON of all users or a view that lists the users. Both are acceptable, as long as the list the current and expected data when refreshed. 
+3. `POST /users/disable/{userId}` where `userId` is an integer should disable the user's account and return the new state of the user account in JSON format.
+4. `POST /users/enable/{userId}` where `userId` is an integer should enable the user's account and return the new state of the user account in JSON format.
+5. The state of the user accounts should persist across app restarts.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Constraints
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Do not add any routes to the host app. All required routes must be provisioned in the module.
+2. Do not reference ANY classes or artifacts in a module from the host app. The app is configured to dynamically load classes and controllers from modules and the routes in their `routes.php`.
